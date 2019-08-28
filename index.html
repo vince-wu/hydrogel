@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+</head>
+<body>
+	<form id=inputform>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" id="inputTable">
+			<tr id="row1">
+				<td>
+					<label for="input1">Input 1</label>
+				</td>
+				<td>
+					<input type="number" id=input1>
+				</td>
+				<td>
+					<label for="input1">Input 2</label>
+				</td>
+				<td>
+					<input type="number" id=input2>
+				</td>
+				<td>
+					<label for="output">Output</label>
+				</td>
+				<td>
+					<input type="number" id=output>
+				</td>
+				<td>
+					<input type="button" value="Calculate" onclick="calculate()"></button>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<script>
+		function calculate() {
+			var input1 = parseInt(document.getElementById("input1").value);
+			var input2 = parseInt(document.getElementById("input2").value);
+			var output = input1 + input2;
+			document.getElementById("output").value = output;
+		};
+	</script>
+</body>
+</html>
