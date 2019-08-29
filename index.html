@@ -4,29 +4,41 @@
 	<title>Test</title>
 </head>
 <body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.0/math.min.js"></script>
 	<form id=inputform>
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" id="inputTable">
+		<table border="0" cellspacing="10" cellpadding="0" id="inputTable">
 			<tr id="row1">
 				<td>
-					<label for="input1">Input 1</label>
+					<label for="fluid">Fluid</label>
 				</td>
 				<td>
-					<input type="number" id=input1>
+					<select>
+						<option value="water">Water</option>
+						<option value="pbs">Phosphate Buffer Solution</option>
+					</select>
 				</td>
 				<td>
-					<label for="input1">Input 2</label>
+					<label for="fluid">Polymer</label>
 				</td>
 				<td>
-					<input type="number" id=input2>
+					<select>
+						<option value="pam">Polyacrilymide</option>
+						<option value="peg">Polyethylene Glycol</option>
+					</select>
+				</td>
+			</tr>
+			<tr id="row2">
+				<td>
+					<label for="meshsize">Mesh Size</label>
 				</td>
 				<td>
-					<label for="output">Output</label>
+					<input type="number" id=meshsize onchange="calculate_hydrogel_property('diffusivity')">
 				</td>
 				<td>
-					<input type="number" id=output>
+					<label for="diffusivity">Diffusivity</label>
 				</td>
 				<td>
-					<input type="button" value="Calculate" onclick="calculate()"></button>
+					<input type="number" id=diffusivity onchange="calculate_hydrogel_property('mesh_size')">
 				</td>
 			</tr>
 		</table>
@@ -38,6 +50,55 @@
 			var output = input1 + input2;
 			document.getElementById("output").value = output;
 		};
+	</script>
+	<script>
+		function calculate_hydrogel_property(property) {
+			var r_FV = 2.69;
+			var r_s = 1;
+			var r_FVW = 2.69;
+			var phi_p = 1;
+			var r_f = 5.1;
+			var nu = 8.9*10**-4;
+			var T = 289;
+			var D_o = calculate_diffusivity(r_s, nu, T);
+			if (property == "mesh_size") {
+				var D = parseFloat(document.getElementById("diffusivity").value);
+				var mesh_size = calculate_hydrogel_meshsize(D_o, r_FV, r_s, r_FVW, phi_p, r_f, D);
+				document.getElementById("meshsize").value = mesh_size;
+			} else {
+				var mesh_size = parseFloat(document.getElementById("meshsize").value);
+				var D = calculate_hydrogel_diffusivity(D_o, r_FV, r_s, r_FVW, phi_p, r_f, mesh_size);
+				document.getElementById("diffusivity").value = D;
+			}
+
+		};
+	</script>
+	<script>
+		function calculate_hydrogel_meshsize(D_o, r_FV, r_s, r_FVW, phi_p, r_f, D) {
+			var mesh_size;
+			var A = (D/D_o-math.erf(r_FV/r_s)*Math.exp(-1*Math.pow(r_s/r_FVW, 3)*(phi_p/(1-phi_p))))/(1-math.erf(r_FV/r_s));
+			console.log(A);
+			mesh_size = (r_s+r_f)/Math.pow((-Math.log(A)/Math.PI),1/2)-2*r_f;
+			console.log(mesh_size);
+			return mesh_size
+		}
+	</script>
+	<script>
+		function calculate_hydrogel_diffusivity(D_o, r_FV, r_s, r_FVW, phi_p, r_f, mesh_size) {
+			var D;
+			D = D_o*(math.erf(r_FV/r_s)*Math.exp(-1*Math.pow(r_s/r_FVW, 3)*(phi_p/(1-phi_p))) + 
+				1-math.erf(r_FV/r_s)*Math.exp(-Math.PI*Math.pow((r_s+r_f)/(mesh_size+2*r_f), 2)));
+			return D;
+		}
+	</script>
+
+	<script>
+		function calculate_diffusivity(r_s, nu, T) {
+			var D_o;
+			var k_b = 1.38064852*10**-23;
+			D_o = k_b*T/(6*Math.PI*nu*r_s)
+			return D_o
+		}
 	</script>
 </body>
 </html>
