@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Hydrogel Diffusivity Calculator</title>
+	<title>Calculator for Solute Diffusion in Hydrogels</title>
 
 	<link rel="stylesheet" href="stylesheets/style.css"> 
 </head>
 <body>
 	<h1>
-		Hydrogel Diffusivity Calculator
+		Calculator for Solute Diffusion in Hydrogels
 	</h1>
+	<h2 style="text-align:left">
+		Background
+	</h2>
 	<p>
-		This tool predicts the diffusivity or the mesh size of an ideal hydrogel system, given one value or the other. The calculations are based on the following equation: 
+		This tool predicts the mass diffusivity in a hydrogel, or the mesh size of a hydrogel, given one value or the other. The calculations are based on the following equation: 
 	</p>
 	<script type="text/javascript" async
 	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
@@ -25,13 +28,26 @@
     \right] 
     $$
     <p>
-    	In the formula above, <i>D</i> is the diffusivity of a solid inside the hydrogel, <i>D<sub>0</sub></i> is the diffusivity of the same solid in the hydrogel liquid, and <i>r<sub>FV</sub></i> and <i>r<sub>FVW</sub></i> are the free volume void sizes in hydrogel and water, respectively. <i>r<sub>s</sub></i> is the hydrodynamic radius of the solute, <i>&#632;<sub>p</sub></i> is the polymer volume fraction, <i>r<sub>f</sub></i> is the radius of the polymer chain, and <i>&#958;</i>; is the hydrogel mesh size. 
+    	In the formula above, <i>D</i> is the diffusivity of a solid inside the hydrogel, <i>D<sub>0</sub></i> is the diffusivity of the same solid in the hydrogel liquid, and <i>r<sub>FV</sub></i> and <i>r<sub>FVW</sub></i> are the free volume void sizes in hydrogel and water, respectively. <i>r<sub>s</sub></i> is the hydrodynamic radius of the solute, <i>&#632;<sub>p</sub></i> is the polymer volume fraction, <i>r<sub>f</sub></i> is the radius of the polymer chain, and <i>&#958;</i> is the hydrogel mesh size. 
     </p>
 	<p>
 		This equation was derived by Eneko A. Iza and the Appel Group at Stanford University. The manuscript detailing this work is available
 		<a href="https://pubs.acs.org/doi/abs/10.1021/acs.macromol.9b00753"><font color="#007BFF">here</font></a>. 
 	</p>
-	</p>
+	<h2 style="text-align:left">
+		Model Assumptions
+	</h2>
+	<ul>
+		<li>Ideal hydrogel system</li>
+		<li>Spherical, inert solute</li>
+		<li>System fluid is water</li>
+		<li>Free volume void size in water and hydrogel are similar (<i>r<sub>FV</sub></i> &#8776; <i>r<sub>FVW </sub></i> = 0.269 nm)</li>
+		<li>Radius of the fibers for Poly(ethylene glycol) = 0.51 nm, Alginate = 0.83 nm and Polyacrylamide = 0.88 nm</li>
+	</ul>
+
+	<h2 style="text-align:left">
+		Diffusivity and Mesh Size Calculator
+	</h2>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.0/math.min.js"></script>
 
@@ -45,14 +61,14 @@
 					<select id="polymer">
 						<option value="pam">Polyacrylamide</option>
 						<option value="peg">Poly(ethylene glycol)</option>
-						<option value="alg">Alignate</option>
+						<option value="alg">Alginate</option>
 					</select>
 				</td>
 				<td>
-					<label for="temperature">Temperature (<span>&#176;C) </label>
+					<label for="temperature">Temperature (&#176;C) </label>
 				</td>
 				<td>
-					<input type="number" id=temperature value="25" style="width: 50%">
+					<input type="number" id=temperature value="25" style="width: 70%">
 				</td>
 
 <!-- 				<td>
@@ -66,30 +82,38 @@
  -->		</tr>
 			<tr id="row2">
 				<td>
-					<label for="volume_fraction">Polymer Volume Fraction (%)</label>
+					<span title="Polymer percentage by volume (vol%) = (volume of polymer / total volume of solution) x 100. This is a percentage value; for example, input 12% as '12'">
+						<label for="volume_fraction">Polymer Volume Fraction (%)</label>
+					</span>
 				</td>
 				<td>
-					<input type="number" id=volume_fraction value="0.05" style="width: 50%">
+					<input type="number" id=volume_fraction value="5" style="width: 50%">
 				</td>
 				<td>
-					<label for="solute_radius">Hydrodynamic Radius of Solute (nm)</label>
+					<span title="e.g. as measured by Dynamic Light Scattering (DLS)">
+						<label for="solute_radius">Hydrodynamic Radius of Solute (nm)</label>
+					</span>
 				</td>
 				<td>
-					<input type="number" id=solute_radius value="1.91" style="width: 50%">
+					<input type="number" id=solute_radius value="1.91" style="width: 70%">
 				</td>
 			</tr>
 			<tr id="row3">
 				<td>
-					<label for="meshsize">Mesh Size (nm)</label>
+					<span title="also known as Correlation Length">
+						<label for="meshsize">Mesh Size (nm)</label>
+					</span>
 				</td>
 				<td>
 					<input type="number" id=meshsize value="35" style="width: 50%">
 				</td>
 				<td>
-					<label for="diffusivity">Diffusivity (<span>&#181;m<sup>2</sup>/s) </label>
+					<span title="also known as Diffusion Constant">
+						<label for="diffusivity">Diffusivity (<span>&#181;m<sup>2</sup>/s) </label>
+					</span>
 				</td>
 				<td>
-					<input type="number" id=diffusivity style="width: 50%">
+					<input type="number" id=diffusivity style="width: 70%">
 				</td>
 			</tr>
 		</table>
@@ -122,7 +146,7 @@
 			var r_f; // [nm] radius of polymer chain
 			var nu; // [Pa*s] dynamic viscosity
 			var r_s; // [nm] radius of solute
-			var phi_p; // [dimensionless] polymer volume fraction: ratio of polymer volume over total volume of hydrogel
+			var phi_p; // [dimensionless, decimal] polymer volume fraction: ratio of polymer volume over total volume of hydrogel
 			var polymerObj = document.getElementById("polymer");
 			var polymer = polymerObj.options[polymerObj.selectedIndex].value;
 			r_s = parseFloat(document.getElementById("solute_radius").value);
@@ -150,7 +174,7 @@
 			}
 
 			//Calculate diffusivity of solid hydrogel in liquid
-			var D_o = calculate_diffusivity(r_s, nu, T); // [um^2/s]
+			var D_o = calculate_diffusivity(r_s, T); // [um^2/s]
 
 			//Determine whether to calculate mesh size or diffusivity and then calculate
 			if (property == "mesh_size") {
@@ -190,10 +214,9 @@
 		}
 
 		//calculate diffusivity
-		function calculate_diffusivity(r_s, nu, T) {
+		function calculate_diffusivity(r_s, T) {
 			var D_o;
 			var nu = calculate_viscosity(T); //[Pa*s], [kg*m^-1*s^-1]
-			nu = 8.9*10**-4;
 			var k_b = 1.38064852*10**-23; // [m^2*kg*s^-2*K^-1] Boltzmann Constant 
 			D_o = k_b*(T+273.15)/(6*Math.PI*nu*r_s*10**-9); // [m^2/s]
 			D_o = D_o*10**12; //[um^2/s]
@@ -205,7 +228,7 @@
 			var nu_o = 0.001684; 
 			var k = 0.03071;
 			var plateau = 0.0002265;
-			var nu = (nu_o - plateau)*Math.exp(-k*T) - plateau;
+			var nu = (nu_o - plateau)*Math.exp(-k*T) + plateau;
 			return nu
 		}
 	</script>
