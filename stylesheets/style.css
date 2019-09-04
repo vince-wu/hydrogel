@@ -1,11 +1,9 @@
 
 body {
   background-color: #fff;
-  margin:auto;
+  margin: 10px 150px;
   padding:50px;
-  text-align:center;
   font: 14px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#727272;
   font-weight:400;
   overflow: scroll;
 }
@@ -13,6 +11,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   color:#222;
   margin:0 0 20px;
+  text-align:center;
 }
 
 p, ul, ol, table, pre, dl {
